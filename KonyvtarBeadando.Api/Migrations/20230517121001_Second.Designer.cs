@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KonyvtarSzerver.Api.Migrations
 {
     [DbContext(typeof(KonyvtarSzerverContext))]
-    [Migration("20230517112453_Second")]
+    [Migration("20230517121001_Second")]
     partial class Second
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

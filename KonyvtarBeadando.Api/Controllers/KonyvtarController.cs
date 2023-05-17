@@ -1,7 +1,7 @@
 ﻿using Konyvtar.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Text.RegularExpressions;
 
 namespace KonyvtarSzerver.Api.Controllers
 {
@@ -12,6 +12,20 @@ namespace KonyvtarSzerver.Api.Controllers
         private readonly KonyvtarSzerverContext _konyvtarSzerverContext;
         private readonly ILogger<KonyvtarController> _logger;
 
+        private bool ContainsSpecialCharacters(string input)
+        {
+            return Regex.IsMatch(input, @"[^a-zA-Z0-9\s]+");
+        }
+
+        private bool CheckWhitespaceViolation(string input)
+        {
+            bool isFirstCharacterWhitespace = Regex.IsMatch(input, @"^\s");
+            bool isLastCharacterWhitespace = Regex.IsMatch(input, @"\s$");
+            bool hasConsecutiveWhitespaces = Regex.IsMatch(input, @"\s\s");
+
+            return isFirstCharacterWhitespace || isLastCharacterWhitespace || hasConsecutiveWhitespaces;
+        }
+
         public KonyvtarController(KonyvtarSzerverContext konyvtarSzerverContext, ILogger<KonyvtarController> logger)
         {
             _konyvtarSzerverContext = konyvtarSzerverContext;
@@ -19,7 +33,7 @@ namespace KonyvtarSzerver.Api.Controllers
         }
 
         [HttpGet("konyvek")]
-        public async Task<ActionResult<IEnumerable<Konyv>>> GetKonyv()
+        public async Task<ActionResult<IEnumerable<Konyv>>> GetKonyvek()
         {
             _logger.LogInformation("Konyvek endpoint was called");
             var konyvek = await _konyvtarSzerverContext.Konyv.ToListAsync();
@@ -27,7 +41,7 @@ namespace KonyvtarSzerver.Api.Controllers
         }
 
         [HttpGet("tagok")]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetTag()
+        public async Task<ActionResult<IEnumerable<Tag>>> GetTagok()
         {
             _logger.LogInformation("Tagok endpoint was called");
             var tagok = await _konyvtarSzerverContext.Tag.ToListAsync();
@@ -35,7 +49,7 @@ namespace KonyvtarSzerver.Api.Controllers
         }
 
         [HttpGet("kolcsonzesek")]
-        public async Task<ActionResult<IEnumerable<Kolcsonzes>>> GetKolcsonzes()
+        public async Task<ActionResult<IEnumerable<Kolcsonzes>>> GetKolcsonzesek()
         {
             _logger.LogInformation("Kolcsonzesek endpoint was called");
             var kolcsonzesek = await _konyvtarSzerverContext.Kolcsonzes.ToListAsync();
@@ -84,6 +98,11 @@ namespace KonyvtarSzerver.Api.Controllers
         [HttpPost("konyv")]
         public async Task<IActionResult> PostKonyv([FromBody] Konyv konyv)
         {
+            if (ContainsSpecialCharacters(konyv.Cim))
+            {
+                return BadRequest();
+            }
+
             _konyvtarSzerverContext.Konyv.Add(konyv);
             await _konyvtarSzerverContext.SaveChangesAsync();
 
@@ -93,6 +112,11 @@ namespace KonyvtarSzerver.Api.Controllers
         [HttpPost("tag")]
         public async Task<IActionResult> PostTag([FromBody] Tag tag)
         {
+            if (tag.Nev.Length == 0 || ContainsSpecialCharacters(tag.Nev) || CheckWhitespaceViolation(tag.Nev))
+            {
+                return BadRequest();
+            }
+
             _konyvtarSzerverContext.Tag.Add(tag);
             await _konyvtarSzerverContext.SaveChangesAsync();
 
