@@ -126,6 +126,11 @@ namespace KonyvtarSzerver.Api.Controllers
         [HttpPost("kolcsonzes")]
         public async Task<IActionResult> PostKolcsonzes([FromBody] Kolcsonzes kolcsonzes)
         {
+            if (kolcsonzes.KolcsonzesIdeje >= kolcsonzes.VisszahozasIdeje)
+            {
+                return BadRequest();
+            }
+
             _konyvtarSzerverContext.Kolcsonzes.Add(kolcsonzes);
             await _konyvtarSzerverContext.SaveChangesAsync();
 
@@ -244,6 +249,11 @@ namespace KonyvtarSzerver.Api.Controllers
             {
                 return NotFound();
             }
+
+            if (existingKolcsonzes.KolcsonzesIdeje >= existingKolcsonzes.VisszahozasIdeje)
+            {
+                return BadRequest();
+            }    
 
             existingKolcsonzes.OlvasoSzam = kolcsonzes.OlvasoSzam;
             existingKolcsonzes.LeltariSzam = kolcsonzes.LeltariSzam;
