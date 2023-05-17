@@ -12,5 +12,9 @@ namespace KonyvtarSzerver.Api
         }
 
         public virtual DbSet<Konyv> Konyv { get; set; }
+
+        public virtual DbSet<Tag> Tag { get; set; }
+
+        public virtual DbSet<Kolcsonzes> Kolcsonzes { get; set; }
     }
 }

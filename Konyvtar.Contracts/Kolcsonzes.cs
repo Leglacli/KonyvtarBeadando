@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Konyvtar.Contracts
 {
-    public class Kolcsonzesek
+    public class Kolcsonzes
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

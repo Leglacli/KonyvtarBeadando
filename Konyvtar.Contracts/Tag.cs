@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Konyvtar.Contracts
 {
-    public class Tagok
+    public class Tag
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
