@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace KonyvtarSzerver.Api.Migrations
 {
-    public partial class Second : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,19 +26,34 @@ namespace KonyvtarSzerver.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Konyv",
+                columns: table => new
+                {
+                    LeltariSzam = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Cim = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Szerzo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Kiado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    KiadasEve = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Konyv", x => x.LeltariSzam);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tag",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    OlvasoSzam = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nev = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Lakcim = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OlvasoSzam = table.Column<int>(type: "int", nullable: false),
                     SzuletesiDatum = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.PrimaryKey("PK_Tag", x => x.OlvasoSzam);
                 });
         }
 
@@ -46,6 +61,9 @@ namespace KonyvtarSzerver.Api.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Kolcsonzes");
+
+            migrationBuilder.DropTable(
+                name: "Konyv");
 
             migrationBuilder.DropTable(
                 name: "Tag");

@@ -5,17 +5,14 @@ namespace Konyvtar.Contracts
 {
     public class Tag
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required]
         public string Nev { get; set; }
 
         [Required]
         public string Lakcim { get; set; }
 
-        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OlvasoSzam { get; set; }
 
         [Required]

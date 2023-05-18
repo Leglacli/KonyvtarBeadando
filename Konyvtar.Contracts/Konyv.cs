@@ -5,10 +5,6 @@ namespace Konyvtar.Contracts
 {
     public class Konyv
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
         [Required]
         public string Cim { get; set; }
 
@@ -18,7 +14,8 @@ namespace Konyvtar.Contracts
         [Required]
         public string Kiado { get; set; }
 
-        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LeltariSzam { get; set; }
 
         [Required]

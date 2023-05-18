@@ -56,10 +56,10 @@ namespace KonyvtarSzerver.Api.Controllers
             return Ok(kolcsonzesek);
         }
 
-        [HttpGet("konyv/{id}")]
-        public async Task<ActionResult<Konyv>> GetKonyv(int id)
+        [HttpGet("konyv/{leltariSzam}")]
+        public async Task<ActionResult<Konyv>> GetKonyv(int leltariSzam)
         {
-            var konyv = await _konyvtarSzerverContext.Konyv.FindAsync(id);
+            var konyv = await _konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
 
             if (konyv is null)
             {
@@ -69,10 +69,10 @@ namespace KonyvtarSzerver.Api.Controllers
             return Ok(konyv);
         }
 
-        [HttpGet("tag/{id}")]
-        public async Task<ActionResult<Tag>> GetTag(int id)
+        [HttpGet("tag/{olvasoSzam}")]
+        public async Task<ActionResult<Tag>> GetTag(int olvasoSzam)
         {
-            var tag = await _konyvtarSzerverContext.Tag.FindAsync(id);
+            var tag = await _konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
 
             if (tag is null)
             {
@@ -137,10 +137,10 @@ namespace KonyvtarSzerver.Api.Controllers
             return Ok();
         }
 
-        [HttpDelete("konyv/{id}")]
-        public async Task<IActionResult> DeleteKonyv(int id)
+        [HttpDelete("konyv/{leltariSzam}")]
+        public async Task<IActionResult> DeleteKonyv(int leltariSzam)
         {
-            var existingKonyv = await _konyvtarSzerverContext.Konyv.FindAsync(id);
+            var existingKonyv = await _konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
 
             if (existingKonyv is null)
             {
@@ -153,10 +153,10 @@ namespace KonyvtarSzerver.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("tag/{id}")]
-        public async Task<IActionResult> DeleteTag(int id)
+        [HttpDelete("tag/{olvasoSzam}")]
+        public async Task<IActionResult> DeleteTag(int olvasoSzam)
         {
-            var existingTag = await _konyvtarSzerverContext.Tag.FindAsync(id);
+            var existingTag = await _konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
 
             if (existingTag is null)
             {
@@ -186,15 +186,15 @@ namespace KonyvtarSzerver.Api.Controllers
         }
 
 
-        [HttpPut("konyv/{id}")]
-        public async Task<IActionResult> PutKonyv(int id, [FromBody] Konyv konyv)
+        [HttpPut("konyv/{leltariSzam}")]
+        public async Task<IActionResult> PutKonyv(int leltariSzam, [FromBody] Konyv konyv)
         {
-            if (id != konyv.Id)
+            if (leltariSzam != konyv.LeltariSzam)
             {
                 return BadRequest();
             }
 
-            var existingKonyv = await _konyvtarSzerverContext.Konyv.FindAsync(id);
+            var existingKonyv = await _konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
 
             if (existingKonyv is null)
             {
@@ -204,22 +204,21 @@ namespace KonyvtarSzerver.Api.Controllers
             existingKonyv.Cim = konyv.Cim;
             existingKonyv.Szerzo = konyv.Szerzo;
             existingKonyv.Kiado = konyv.Kiado;
-            existingKonyv.LeltariSzam = konyv.LeltariSzam;
             existingKonyv.KiadasEve = konyv.KiadasEve;
             await _konyvtarSzerverContext.SaveChangesAsync();
 
             return NoContent();
         }
 
-        [HttpPut("tag/{id}")]
-        public async Task<IActionResult> PutTag(int id, [FromBody] Tag tag)
+        [HttpPut("tag/{olvasoSzam}")]
+        public async Task<IActionResult> PutTag(int olvasoSzam, [FromBody] Tag tag)
         {
-            if (id != tag.Id)
+            if (olvasoSzam != tag.OlvasoSzam)
             {
                 return BadRequest();
             }
 
-            var existingTag = await _konyvtarSzerverContext.Tag.FindAsync(id);
+            var existingTag = await _konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
 
             if (existingTag is null)
             {
@@ -228,7 +227,6 @@ namespace KonyvtarSzerver.Api.Controllers
 
             existingTag.Nev = tag.Nev;
             existingTag.Lakcim = tag.Lakcim;
-            existingTag.OlvasoSzam = tag.OlvasoSzam;
             existingTag.SzuletesiDatum = tag.SzuletesiDatum;
             await _konyvtarSzerverContext.SaveChangesAsync();
 

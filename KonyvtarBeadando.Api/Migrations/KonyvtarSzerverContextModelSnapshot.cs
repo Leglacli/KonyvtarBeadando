@@ -49,11 +49,11 @@ namespace KonyvtarSzerver.Api.Migrations
 
             modelBuilder.Entity("Konyvtar.Contracts.Konyv", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("LeltariSzam")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeltariSzam"), 1L, 1);
 
                     b.Property<string>("Cim")
                         .IsRequired()
@@ -66,25 +66,22 @@ namespace KonyvtarSzerver.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LeltariSzam")
-                        .HasColumnType("int");
-
                     b.Property<string>("Szerzo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("LeltariSzam");
 
                     b.ToTable("Konyv");
                 });
 
             modelBuilder.Entity("Konyvtar.Contracts.Tag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OlvasoSzam")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OlvasoSzam"), 1L, 1);
 
                     b.Property<string>("Lakcim")
                         .IsRequired()
@@ -94,13 +91,10 @@ namespace KonyvtarSzerver.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OlvasoSzam")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("SzuletesiDatum")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("OlvasoSzam");
 
                     b.ToTable("Tag");
                 });
