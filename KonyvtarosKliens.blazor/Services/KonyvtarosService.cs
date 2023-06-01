@@ -25,5 +25,8 @@ namespace KonyvtarosKliens.blazor.Services
 
 		public Task<Konyv?> GetKonyvAsync(int id) => 
 			_httpClient.GetFromJsonAsync<Konyv?>($"konyvtar/konyv/{id}");
+
+		public Task<Tag?> GetTagAsync(int id) =>
+			_httpClient.GetFromJsonAsync<Tag?>($"konyvtar/tag/{id}");
 	}
 }

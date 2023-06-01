@@ -8,6 +8,10 @@ namespace KonyvtarosKliens.blazor.Services
 
 		Task<IEnumerable<Kolcsonzes>?> GetAllKolcsonzesAsync();
 
+		Task<IEnumerable<Tag>?> GetAllTagAsync();
+
 		Task<Konyv?> GetKonyvAsync(int id);
+
+		Task<Tag?> GetTagAsync(int id);
 	}
 }

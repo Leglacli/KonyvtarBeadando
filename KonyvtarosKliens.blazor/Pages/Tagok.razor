@@ -1,9 +1,46 @@
 ﻿@page "/tagok"
+@using Konyvtar.Contracts
+@using KonyvtarosKliens.blazor.Services;
+@inject IKonyvtarosService KonyvtarosService
 
 <PageTitle>Tagok</PageTitle>
 
-<h3>Tagok</h3>
-
+@if (TagList is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<h3>Tagok</h3>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Olvasó szám</th>
+				<th>Név</th>
+				<th>Lakcím</th>
+				<th>Születési Dátum</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var Tag in TagList)
+			{
+				<tr>
+					<td>@Tag.OlvasoSzam</td>
+					<td>@Tag.Nev</td>
+					<td>@Tag.Lakcim</td>
+					<td>@Tag.SzuletesiDatum</td>
+					<td><a href="tagok/@Tag.OlvasoSzam" class="btn btn-primary"></a></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
 @code {
+	private IEnumerable<Tag>? TagList { get; set; }
 
+	protected override async Task OnInitializedAsync()
+	{
+		TagList = await KonyvtarosService.GetAllTagAsync();
+	}
 }
