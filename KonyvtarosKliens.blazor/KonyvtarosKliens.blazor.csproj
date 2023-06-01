@@ -11,4 +11,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.15" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\sample-data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Konyvtar.Contracts\Konyvtar.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

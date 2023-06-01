@@ -1,0 +1,36 @@
+﻿@page "/konyvek/{id:int}"
+@using Konyvtar.Contracts;
+@using KonyvtarosKliens.blazor.Services;
+@inject IKonyvtarosService KonyvtarosService
+
+@if (Konyv is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<h3>Könyv állapot</h3>
+
+	<p>
+		Kikölcsönözve:
+	</p>
+	<p>
+		Kikölcsönző: 
+	</p>
+	<p>
+		Visszahozás dátuma: 
+	</p>
+}
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	private Konyv? Konyv { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		Konyv = await KonyvtarosService.GetKonyvAsync(Id);
+	}
+}
+	

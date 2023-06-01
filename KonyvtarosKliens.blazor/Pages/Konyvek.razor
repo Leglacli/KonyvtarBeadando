@@ -1,0 +1,50 @@
+﻿@page "/konyvek"
+@using Konyvtar.Contracts
+@using KonyvtarosKliens.blazor.Services;
+@inject IKonyvtarosService KonyvtarosService
+
+<PageTitle>Könyvek</PageTitle>
+
+@if (KonyvList is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<h3>Könyvek</h3>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Leltári szám</th>
+				<th>Cím</th>
+				<th>Szerző</th>
+				<th>Kiadó</th>
+				<th>Kiadás éve</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var Konyv in KonyvList)
+			{
+				<tr>
+					<td>@Konyv.LeltariSzam</td>
+					<td>@Konyv.Cim</td>
+					<td>@Konyv.Szerzo</td>
+					<td>@Konyv.Kiado</td>
+					<td>@Konyv.KiadasEve</td>
+					<td>Állapot<a href="konyvek/@Konyv.LeltariSzam" class="btn btn-primary"></a></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+@code {
+	private IEnumerable<Konyv>? KonyvList { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		KonyvList = await KonyvtarosService.GetAllKonyvAsync();
+	}
+}
