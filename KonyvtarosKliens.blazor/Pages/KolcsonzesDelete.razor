@@ -1,0 +1,23 @@
+﻿@page "/kolcsonzesek/{Id:int}"
+@using Konyvtar.Contracts;
+@using KonyvtarosKliens.blazor.Services;
+@inject IKonyvtarosService KonyvtarosService
+@inject NavigationManager NavigationManager
+
+@if (Kolcsonzes is null)
+{
+	<h3>Deleting...</h3>
+}
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	private Kolcsonzes? Kolcsonzes { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		await KonyvtarosService.DeleteKolcsonzesAsync(Id);
+		NavigationManager.NavigateTo("/kolcsonzesek");
+	}
+}

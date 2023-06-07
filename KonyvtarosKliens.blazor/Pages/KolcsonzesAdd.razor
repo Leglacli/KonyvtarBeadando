@@ -1,0 +1,62 @@
+﻿@page "/kolcsonzesek/add"
+@using Konyvtar.Contracts;
+@using KonyvtarosKliens.blazor.Services;
+@inject IKonyvtarosService KonyvtarosService
+@inject NavigationManager NavigationManager
+
+@if (kolcsonzott)
+{
+    <h3>A(z) @kolcsonzottLeltariSzam leltári számú könyv már ki van kölcsönözve!</h3>
+}
+
+<EditForm Model="@Kolcsonzes" OnValidSubmit="@HandleValidSubmitAsync">
+    <div class="mb-3">
+        <label class="form-label">Tag olvasó száma</label>
+        <InputNumber @bind-Value="@Kolcsonzes.OlvasoSzam" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Könyv leltári száma</label>
+        <InputNumber @bind-Value="@Kolcsonzes.LeltariSzam" class="form-control" />
+
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Kölcsönzés ideje</label>
+        <InputDate @bind-Value="@Kolcsonzes.KolcsonzesIdeje" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Visszahozás ideje</label>
+        <InputDate @bind-Value="@Kolcsonzes.VisszahozasIdeje" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success form-control mb-3">Hozzáadás</button>
+</EditForm>
+
+@code {
+
+    private IEnumerable<Kolcsonzes>? KolcsonzesList { get; set; }
+
+    private Kolcsonzes Kolcsonzes { get; set; } = new Kolcsonzes();
+
+    private bool kolcsonzott = false;
+    private int kolcsonzottLeltariSzam = 0;
+
+    private async Task HandleValidSubmitAsync()
+    {
+        KolcsonzesList = await KonyvtarosService.GetAllKolcsonzesAsync();
+
+        foreach (Kolcsonzes kolcsonzes in KolcsonzesList)
+        {
+            if (kolcsonzes.LeltariSzam == Kolcsonzes.LeltariSzam)
+            {
+                kolcsonzott = true;
+                kolcsonzottLeltariSzam = kolcsonzes.LeltariSzam;
+                NavigationManager.NavigateTo("/kolcsonzesek/add");
+                return;
+
+            }
+        }
+
+        await KonyvtarosService.AddKolcsonzesAsync(Kolcsonzes!);
+        NavigationManager.NavigateTo("/kolcsonzesek");
+    }
+}

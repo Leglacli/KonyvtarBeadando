@@ -14,7 +14,7 @@ namespace KonyvtarSzerver.Api.Controllers
 
         private bool ContainsSpecialCharacters(string input)
         {
-            return Regex.IsMatch(input, @"[^a-zA-Z0-9\s]+");
+            return Regex.IsMatch(input, @"[^a-zA-Z0-9\sáéíóöőúüűÁÉÍÓÖŐÚÜŰ]+");
         }
 
         private bool CheckWhitespaceViolation(string input)

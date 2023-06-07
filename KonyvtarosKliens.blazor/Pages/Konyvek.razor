@@ -1,4 +1,5 @@
 ﻿@page "/konyvek"
+@page "/"
 @using Konyvtar.Contracts
 @using KonyvtarosKliens.blazor.Services;
 @inject IKonyvtarosService KonyvtarosService
@@ -32,7 +33,7 @@ else
 					<td>@Konyv.Szerzo</td>
 					<td>@Konyv.Kiado</td>
 					<td>@Konyv.KiadasEve</td>
-					<td>Állapot<a href="konyvek/@Konyv.LeltariSzam" class="btn btn-primary"></a></td>
+					<td><a href="konyvek/@Konyv.LeltariSzam" class="btn btn-primary">Állapot</a></td>
 				</tr>
 			}
 		</tbody>

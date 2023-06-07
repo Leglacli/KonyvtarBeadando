@@ -1,9 +1,53 @@
 ﻿@page "/kolcsonzesek"
+@using Konyvtar.Contracts
+@using KonyvtarosKliens.blazor.Services;
+@inject IKonyvtarosService KonyvtarosService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Kölcsönzések</PageTitle>
 
-<h3>Kolcsonzesek</h3>
+@if (KolcsonzesList is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<a href="kolcsonzesek/add" class="btn btn-success">Új kölcsönzés</a>
+
+	<h3>Kölcsönzések</h3>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Azonosító</th>
+				<th>Tag olvasó száma</th>
+				<th>Könyv leltári száma</th>
+				<th>Kölcsönzés Ideje</th>
+				<th>Visszahozás Ideje</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var Kolcsonzes in KolcsonzesList)
+			{
+				<tr>
+					<td>@Kolcsonzes.Id</td>
+					<td>@Kolcsonzes.OlvasoSzam</td>
+					<td>@Kolcsonzes.LeltariSzam</td>
+					<td>@Kolcsonzes.KolcsonzesIdeje</td>
+					<td>@Kolcsonzes.VisszahozasIdeje</td>
+					<td><a href="kolcsonzesek/@Kolcsonzes.Id" class="btn btn-danger">Törlés</a></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
 
 @code {
 
+	private IEnumerable<Kolcsonzes>? KolcsonzesList { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		KolcsonzesList = await KonyvtarosService.GetAllKolcsonzesAsync();
+	}
 }

@@ -2,9 +2,31 @@
 @using Konyvtar.Contracts;
 @using KonyvtarosKliens.blazor.Services;
 @inject IKonyvtarosService KonyvtarosService
+@inject NavigationManager NavigationManager
 
-<h3>TagAdd</h3>
+<EditForm Model="@Tag" OnValidSubmit="@HandleValidSubmitAsync">
+    <div class="mb-3">
+        <label class="form-label">Név</label>
+        <InputText @bind-Value="@Tag.Nev" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Lakcím</label>
+        <InputText @bind-Value="Tag.Lakcim" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Születési Dátum</label>
+        <InputDate @bind-Value="@Tag.SzuletesiDatum" class="form-control"/>
+    </div>
+
+    <button type="submit" class="btn btn-success form-control mb-3">Hozzáadás</button>
+</EditForm>
 
 @code {
+    private Tag Tag { get; set; } = new Tag();
 
+    private async Task HandleValidSubmitAsync()
+    {
+        await KonyvtarosService.AddTagAsync(Tag!);
+        NavigationManager.NavigateTo("/tagok");
+    }
 }

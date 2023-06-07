@@ -13,5 +13,13 @@ namespace KonyvtarosKliens.blazor.Services
 		Task<Konyv?> GetKonyvAsync(int id);
 
 		Task<Tag?> GetTagAsync(int id);
+
+		Task<Kolcsonzes?> GetKolcsonzesAsync(int id);
+
+		Task AddTagAsync(Tag tag);
+
+        Task AddKolcsonzesAsync(Kolcsonzes kolcsonzes);
+
+		Task DeleteKolcsonzesAsync(int id);
 	}
 }

@@ -3,8 +3,6 @@
 @using KonyvtarosKliens.blazor.Services;
 @inject IKonyvtarosService KonyvtarosService
 
-<h3>Tag adatok</h3>
-
 @if (isLoading)
 {
 	<p>Loading...</p>
@@ -40,7 +38,7 @@ else
 							{
 								<td>@kolcsonzes.VisszahozasIdeje</td>
 							}
-							
+
 						</tr>
 					}
 				}

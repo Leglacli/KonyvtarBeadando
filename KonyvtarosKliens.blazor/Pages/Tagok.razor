@@ -11,6 +11,8 @@
 }
 else
 {
+	<a href="tagok/add" class="btn btn-success">Új tag hozzáadás</a>
+
 	<h3>Tagok</h3>
 	<table class="table table-bordered table-hover">
 		<thead>
@@ -30,7 +32,7 @@ else
 					<td>@Tag.Nev</td>
 					<td>@Tag.Lakcim</td>
 					<td>@Tag.SzuletesiDatum</td>
-					<td><a href="tagok/@Tag.OlvasoSzam" class="btn btn-primary"></a></td>
+					<td><a href="tagok/@Tag.OlvasoSzam" class="btn btn-primary">Kölcsönzések</a></td>
 				</tr>
 			}
 		</tbody>
