@@ -1,4 +1,8 @@
-﻿namespace Konyvtar.Contracts
+﻿// <copyright file="Kolcsonzes.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace Konyvtar.Contracts
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
