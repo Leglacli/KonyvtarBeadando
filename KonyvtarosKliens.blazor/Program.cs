@@ -1,5 +1,9 @@
-using KonyvtarosKliens.blazor;
-using KonyvtarosKliens.blazor.Services;
+// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using KonyvtarosKliens.Blazor;
+using KonyvtarosKliens.Blazor.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 

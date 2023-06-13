@@ -1,16 +1,20 @@
-﻿using Konyvtar.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
+﻿// <copyright file="KonyvtarController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace KonyvtarSzerver.Api.Controllers
 {
+    using System.Text.RegularExpressions;
+    using Konyvtar.Contracts;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+
     [ApiController]
     [Route("[controller]")]
     public class KonyvtarController : ControllerBase
     {
-        private readonly KonyvtarSzerverContext _konyvtarSzerverContext;
-        private readonly ILogger<KonyvtarController> _logger;
+        private readonly KonyvtarSzerverContext konyvtarSzerverContext;
+        private readonly ILogger<KonyvtarController> logger;
 
         private bool ContainsSpecialCharacters(string input)
         {
@@ -28,99 +32,99 @@ namespace KonyvtarSzerver.Api.Controllers
 
         public KonyvtarController(KonyvtarSzerverContext konyvtarSzerverContext, ILogger<KonyvtarController> logger)
         {
-            _konyvtarSzerverContext = konyvtarSzerverContext;
-            _logger = logger;
+            this.konyvtarSzerverContext = konyvtarSzerverContext;
+            this.logger = logger;
         }
 
         [HttpGet("konyvek")]
         public async Task<ActionResult<IEnumerable<Konyv>>> GetKonyvek()
         {
-            _logger.LogInformation("Konyvek endpoint was called");
-            var konyvek = await _konyvtarSzerverContext.Konyv.ToListAsync();
-            return Ok(konyvek);
+            this.logger.LogInformation("Konyvek endpoint was called");
+            var konyvek = await this.konyvtarSzerverContext.Konyv.ToListAsync();
+            return this.Ok(konyvek);
         }
 
         [HttpGet("tagok")]
         public async Task<ActionResult<IEnumerable<Tag>>> GetTagok()
         {
-            _logger.LogInformation("Tagok endpoint was called");
-            var tagok = await _konyvtarSzerverContext.Tag.ToListAsync();
-            return Ok(tagok);
+            this.logger.LogInformation("Tagok endpoint was called");
+            var tagok = await this.konyvtarSzerverContext.Tag.ToListAsync();
+            return this.Ok(tagok);
         }
 
         [HttpGet("kolcsonzesek")]
         public async Task<ActionResult<IEnumerable<Kolcsonzes>>> GetKolcsonzesek()
         {
-            _logger.LogInformation("Kolcsonzesek endpoint was called");
-            var kolcsonzesek = await _konyvtarSzerverContext.Kolcsonzes.ToListAsync();
-            return Ok(kolcsonzesek);
+            this.logger.LogInformation("Kolcsonzesek endpoint was called");
+            var kolcsonzesek = await this.konyvtarSzerverContext.Kolcsonzes.ToListAsync();
+            return this.Ok(kolcsonzesek);
         }
 
         [HttpGet("konyv/{leltariSzam}")]
         public async Task<ActionResult<Konyv>> GetKonyv(int leltariSzam)
         {
-            var konyv = await _konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
+            var konyv = await this.konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
 
             if (konyv is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(konyv);
+            return this.Ok(konyv);
         }
 
         [HttpGet("tag/{olvasoSzam}")]
         public async Task<ActionResult<Tag>> GetTag(int olvasoSzam)
         {
-            var tag = await _konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
+            var tag = await this.konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
 
             if (tag is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(tag);
+            return this.Ok(tag);
         }
 
         [HttpGet("kolcsonzes/{id}")]
         public async Task<ActionResult<Tag>> GetKolcsonzes(int id)
         {
-            var kolcsonzes = await _konyvtarSzerverContext.Kolcsonzes.FindAsync(id);
+            var kolcsonzes = await this.konyvtarSzerverContext.Kolcsonzes.FindAsync(id);
 
             if (kolcsonzes is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(kolcsonzes);
+            return this.Ok(kolcsonzes);
         }
 
         [HttpPost("konyv")]
         public async Task<IActionResult> PostKonyv([FromBody] Konyv konyv)
         {
-            if (ContainsSpecialCharacters(konyv.Cim))
+            if (this.ContainsSpecialCharacters(konyv.Cim))
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            _konyvtarSzerverContext.Konyv.Add(konyv);
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            this.konyvtarSzerverContext.Konyv.Add(konyv);
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return Ok();
+            return this.Ok();
         }
 
         [HttpPost("tag")]
         public async Task<IActionResult> PostTag([FromBody] Tag tag)
         {
-            if (tag.Nev.Length == 0 || ContainsSpecialCharacters(tag.Nev) || CheckWhitespaceViolation(tag.Nev))
+            if (tag.Nev.Length == 0 || this.ContainsSpecialCharacters(tag.Nev) || this.CheckWhitespaceViolation(tag.Nev))
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            _konyvtarSzerverContext.Tag.Add(tag);
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            this.konyvtarSzerverContext.Tag.Add(tag);
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return Ok();
+            return this.Ok();
         }
 
         [HttpPost("kolcsonzes")]
@@ -128,86 +132,85 @@ namespace KonyvtarSzerver.Api.Controllers
         {
             if (kolcsonzes.KolcsonzesIdeje >= kolcsonzes.VisszahozasIdeje)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            _konyvtarSzerverContext.Kolcsonzes.Add(kolcsonzes);
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            this.konyvtarSzerverContext.Kolcsonzes.Add(kolcsonzes);
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return Ok();
+            return this.Ok();
         }
 
         [HttpDelete("konyv/{leltariSzam}")]
         public async Task<IActionResult> DeleteKonyv(int leltariSzam)
         {
-            var existingKonyv = await _konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
+            var existingKonyv = await this.konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
 
             if (existingKonyv is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            _konyvtarSzerverContext.Konyv.Remove(existingKonyv);
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            this.konyvtarSzerverContext.Konyv.Remove(existingKonyv);
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return NoContent();
+            return this.NoContent();
         }
 
         [HttpDelete("tag/{olvasoSzam}")]
         public async Task<IActionResult> DeleteTag(int olvasoSzam)
         {
-            var existingTag = await _konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
+            var existingTag = await this.konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
 
             if (existingTag is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            _konyvtarSzerverContext.Tag.Remove(existingTag);
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            this.konyvtarSzerverContext.Tag.Remove(existingTag);
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return NoContent();
+            return this.NoContent();
         }
 
         [HttpDelete("kolcsonzes/{id}")]
         public async Task<IActionResult> DeleteKolcsonzes(int id)
         {
-            var existingKolcsonzes = await _konyvtarSzerverContext.Kolcsonzes.FindAsync(id);
+            var existingKolcsonzes = await this.konyvtarSzerverContext.Kolcsonzes.FindAsync(id);
 
             if (existingKolcsonzes is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            _konyvtarSzerverContext.Kolcsonzes.Remove(existingKolcsonzes);
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            this.konyvtarSzerverContext.Kolcsonzes.Remove(existingKolcsonzes);
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return NoContent();
+            return this.NoContent();
         }
-
 
         [HttpPut("konyv/{leltariSzam}")]
         public async Task<IActionResult> PutKonyv(int leltariSzam, [FromBody] Konyv konyv)
         {
             if (leltariSzam != konyv.LeltariSzam)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            var existingKonyv = await _konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
+            var existingKonyv = await this.konyvtarSzerverContext.Konyv.FindAsync(leltariSzam);
 
             if (existingKonyv is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
             existingKonyv.Cim = konyv.Cim;
             existingKonyv.Szerzo = konyv.Szerzo;
             existingKonyv.Kiado = konyv.Kiado;
             existingKonyv.KiadasEve = konyv.KiadasEve;
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return NoContent();
+            return this.NoContent();
         }
 
         [HttpPut("tag/{olvasoSzam}")]
@@ -215,22 +218,22 @@ namespace KonyvtarSzerver.Api.Controllers
         {
             if (olvasoSzam != tag.OlvasoSzam)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            var existingTag = await _konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
+            var existingTag = await this.konyvtarSzerverContext.Tag.FindAsync(olvasoSzam);
 
             if (existingTag is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
             existingTag.Nev = tag.Nev;
             existingTag.Lakcim = tag.Lakcim;
             existingTag.SzuletesiDatum = tag.SzuletesiDatum;
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return NoContent();
+            return this.NoContent();
         }
 
         [HttpPut("kolcsonzes/{id}")]
@@ -238,28 +241,28 @@ namespace KonyvtarSzerver.Api.Controllers
         {
             if (id != kolcsonzes.Id)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
-            var existingKolcsonzes = await _konyvtarSzerverContext.Kolcsonzes.FindAsync(id);
+            var existingKolcsonzes = await this.konyvtarSzerverContext.Kolcsonzes.FindAsync(id);
 
             if (existingKolcsonzes is null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
             if (existingKolcsonzes.KolcsonzesIdeje >= existingKolcsonzes.VisszahozasIdeje)
             {
-                return BadRequest();
-            }    
+                return this.BadRequest();
+            }
 
             existingKolcsonzes.OlvasoSzam = kolcsonzes.OlvasoSzam;
             existingKolcsonzes.LeltariSzam = kolcsonzes.LeltariSzam;
             existingKolcsonzes.KolcsonzesIdeje = kolcsonzes.KolcsonzesIdeje;
             existingKolcsonzes.VisszahozasIdeje = kolcsonzes.VisszahozasIdeje;
-            await _konyvtarSzerverContext.SaveChangesAsync();
+            await this.konyvtarSzerverContext.SaveChangesAsync();
 
-            return NoContent();
+            return this.NoContent();
         }
     }
 }

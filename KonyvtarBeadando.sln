@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonyvtarSzerver.Api", "KonyvtarBeadando.Api\KonyvtarSzerver.Api.csproj", "{7F0EFD10-B18C-45CF-B6AA-7CFA1099C756}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonyvtarosKliens.blazor", "KonyvtarosKliens.blazor\KonyvtarosKliens.blazor.csproj", "{9C00119F-D179-480F-8D70-E5EB0D922B0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonyvtarosKliens.Blazor", "KonyvtarosKliens.blazor\KonyvtarosKliens.Blazor.csproj", "{9C00119F-D179-480F-8D70-E5EB0D922B0E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UgyfelKliens.blazor", "UgyfelKliens.blazor\UgyfelKliens.blazor.csproj", "{C4987AF1-EA00-4760-8FF0-0320BD7416F0}"
 EndProject

@@ -1,3 +1,7 @@
+// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using KonyvtarSzerver.Api;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -5,20 +9,19 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog(
-	(_, loggerConfiguration) => loggerConfiguration
-		.MinimumLevel.Information()
-		.WriteTo.Console());
+    (_, loggerConfiguration) => loggerConfiguration
+        .MinimumLevel.Information()
+        .WriteTo.Console());
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<KonyvtarSzerverContext>(
     options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
-		options.UseLazyLoadingProxies();
-	});
+        options.UseLazyLoadingProxies();
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
