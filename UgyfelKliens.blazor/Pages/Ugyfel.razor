@@ -1,0 +1,80 @@
+﻿@page "/tagok/{olvasoSzam:int}"
+@using Konyvtar.Contracts;
+@using UgyfelKliens.Blazor.Services;
+@using System.Linq;
+@inject IUgyfelService UgyfelService
+
+<PageTitle>Könyveid</PageTitle>
+
+@if (Tag is null)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<h3>Üdv, @Tag.Nev</h3>
+	<h2>Kölcsönzött könyveid</h2>
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Cím</th>
+				<th>Szerző</th>
+				<th>Kölcsönzés ideje</th>
+				<th>Visszahozás ideje</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (Kolcsonzes kolcsonzes in matchedKolcsonzesek.OrderBy(a => a.VisszahozasIdeje))
+			{
+				foreach (Konyv konyv in Konyvek)
+				{
+					if (kolcsonzes.LeltariSzam == konyv.LeltariSzam)
+					{
+						<tr>
+							<td>@konyv.Cim</td>
+							<td>@konyv.Szerzo</td>
+							<td>@kolcsonzes.KolcsonzesIdeje</td>
+							@if (@kolcsonzes.VisszahozasIdeje < @currentDate)
+							{
+								<td class="text-danger">@kolcsonzes.VisszahozasIdeje</td>
+							}
+							else
+							{
+								<td>@kolcsonzes.VisszahozasIdeje</td>
+							}
+
+						</tr>
+					}
+				}
+			}
+			
+		</tbody>
+		</table>
+}
+@code {
+	[Parameter]
+	public int olvasoSzam { get; set; }
+	
+	private bool isLoading = true;
+
+	DateTime currentDate = DateTime.Now;
+
+	private IEnumerable<Kolcsonzes>? Kolcsonzesek { get; set; }
+	private IEnumerable<Kolcsonzes>? matchedKolcsonzesek { get; set; }
+	private IEnumerable<Konyv>? Konyvek { get; set; }
+
+	private Tag? Tag { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		Kolcsonzesek = await UgyfelService.GetAllKolcsonzesAsync();
+
+		Tag = await UgyfelService.GetTagAsync(olvasoSzam);
+
+		Konyvek = await UgyfelService.GetAllKonyvAsync();
+
+		matchedKolcsonzesek = Kolcsonzesek.Where(k => k.OlvasoSzam == Tag.OlvasoSzam);
+
+		isLoading = false;
+	}
+}

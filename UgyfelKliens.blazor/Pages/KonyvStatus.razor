@@ -1,0 +1,74 @@
+﻿@page "/konyvek/{id:int}"
+@using Konyvtar.Contracts;
+@using UgyfelKliens.Blazor.Services;
+@inject IUgyfelService KonyvtarosService
+
+<PageTitle>@Konyv.Cim</PageTitle>
+
+@if (isLoading)
+{
+	<p>Loading...</p>
+}
+else
+{
+	<h3>Könyv állapot</h3>
+
+	@if (kikolcsonozve)
+	{
+		<p>
+			Kikölcsönözve: Igen
+		</p>
+		<p>
+			Kikölcsönző: @nev
+		</p>
+		<p>
+			Visszahozás ideje: @visszahozasIdeje
+		</p>
+	}
+	else
+	{
+		<p>
+			Kikölcsönözve: Nem
+		</p>
+	}
+
+
+}
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	private bool isLoading = true;
+
+	private bool kikolcsonozve = false;
+	private string? nev;
+	private DateTime? visszahozasIdeje;
+
+	private Konyv? Konyv { get; set; }
+	private Tag? Tag { get; set; }
+
+	private IEnumerable<Kolcsonzes>? Kolcsonzesek { get; set; }
+	private IEnumerable<Tag>? Tagok { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		Konyv = await KonyvtarosService.GetKonyvAsync(Id);
+
+		Kolcsonzesek = await KonyvtarosService.GetAllKolcsonzesAsync();
+
+		foreach (Kolcsonzes kolcsonzes in Kolcsonzesek)
+		{
+			if (kolcsonzes.LeltariSzam == Konyv.LeltariSzam)
+			{
+				kikolcsonozve = true;
+				visszahozasIdeje = kolcsonzes.VisszahozasIdeje;
+				Tag = await KonyvtarosService.GetTagAsync(kolcsonzes.OlvasoSzam);
+				nev = Tag.Nev;
+			}
+		}
+
+		isLoading = false;
+	}
+}
+	

@@ -1,0 +1,44 @@
+﻿@page "/lekerdezes"
+@using Konyvtar.Contracts
+@using UgyfelKliens.Blazor.Services;
+@inject IUgyfelService UgyfelService
+@inject NavigationManager NavigationManager;
+
+<PageTitle>Lekérdezés</PageTitle>
+
+<h3>Írja be a nevét a kölcsönzött könyvei lekérdezéséhez.</h3>
+
+<EditForm Model="@Ugyfel" OnValidSubmit="@HandleValidSubmitAsync">
+    <div class="mb-3">
+        <InputText @bind-Value="@Ugyfel.Nev" class="form-control"/>
+    </div>
+
+    <button type="submit" class="btn btn-success form-control mb-3">Lekérdezés</button>
+</EditForm>
+
+@code {
+    private int olvasoSzam { get; set; }
+
+    private Tag Ugyfel { get; set; } = new Tag();
+
+    private IEnumerable<Tag>? TagList { get; set; }
+
+    private async Task HandleValidSubmitAsync()
+    {
+        TagList = await UgyfelService.GetAllTagAsync();
+
+        foreach (var Tag in TagList)
+        {      
+            if (Ugyfel.Nev == Tag.Nev)
+            {
+                olvasoSzam = Tag.OlvasoSzam;
+                NavigationManager.NavigateTo("/tagok/" + olvasoSzam);
+                break;
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/lekerdezes");
+            }
+        }
+    }
+}
