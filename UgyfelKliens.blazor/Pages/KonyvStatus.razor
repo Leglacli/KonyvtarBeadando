@@ -1,9 +1,9 @@
 ﻿@page "/konyvek/{id:int}"
 @using Konyvtar.Contracts;
 @using UgyfelKliens.Blazor.Services;
-@inject IUgyfelService KonyvtarosService
+@inject IUgyfelService UgyfelService
 
-<PageTitle>@Konyv.Cim</PageTitle>
+<PageTitle>Könyv: @konyvneve</PageTitle>
 
 @if (isLoading)
 {
@@ -16,6 +16,9 @@ else
 	@if (kikolcsonozve)
 	{
 		<p>
+			Könyv neve: @konyvneve
+		</p>
+		<p>
 			Kikölcsönözve: Igen
 		</p>
 		<p>
@@ -27,6 +30,9 @@ else
 	}
 	else
 	{
+		<p>
+			Könyv neve: @konyvneve
+		</p>
 		<p>
 			Kikölcsönözve: Nem
 		</p>
@@ -42,6 +48,7 @@ else
 	private bool isLoading = true;
 
 	private bool kikolcsonozve = false;
+	private string? konyvneve;
 	private string? nev;
 	private DateTime? visszahozasIdeje;
 
@@ -53,18 +60,20 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		Konyv = await KonyvtarosService.GetKonyvAsync(Id);
+		Konyv = await UgyfelService.GetKonyvAsync(Id);
 
-		Kolcsonzesek = await KonyvtarosService.GetAllKolcsonzesAsync();
+		Kolcsonzesek = await UgyfelService.GetAllKolcsonzesAsync();
+		
+		konyvneve = @Konyv?.Cim;
 
 		foreach (Kolcsonzes kolcsonzes in Kolcsonzesek)
 		{
-			if (kolcsonzes.LeltariSzam == Konyv.LeltariSzam)
+			if (kolcsonzes.LeltariSzam == Konyv?.LeltariSzam)
 			{
 				kikolcsonozve = true;
 				visszahozasIdeje = kolcsonzes.VisszahozasIdeje;
-				Tag = await KonyvtarosService.GetTagAsync(kolcsonzes.OlvasoSzam);
-				nev = Tag.Nev;
+				Tag = await UgyfelService.GetTagAsync(kolcsonzes.OlvasoSzam);
+				nev = Tag?.Nev;
 			}
 		}
 
