@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.blazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>

@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "UgyfelKliens.blazor": {
+    "UgyfelKliens.Blazor": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
