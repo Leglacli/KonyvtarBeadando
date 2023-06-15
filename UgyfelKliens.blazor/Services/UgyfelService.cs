@@ -112,4 +112,3 @@ namespace UgyfelKliens.Blazor.Services
             await this.httpClient.DeleteAsync($"konyvtar/kolcsonzes/{id}");
     }
 }
-}
