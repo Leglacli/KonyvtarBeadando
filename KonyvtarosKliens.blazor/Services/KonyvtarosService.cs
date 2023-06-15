@@ -36,13 +36,22 @@ namespace KonyvtarosKliens.Blazor.Services
         public Task<Kolcsonzes?> GetKolcsonzesAsync(int id) =>
             this.httpClient.GetFromJsonAsync<Kolcsonzes?>($"konyvtar/kolcsonzes/{id}");
 
+        public async Task AddKonyvAsync(Konyv konyv) =>
+            await this.httpClient.PostAsJsonAsync("konyvtar/konyv", konyv);
+
         public async Task AddTagAsync(Tag tag) =>
             await this.httpClient.PostAsJsonAsync("konyvtar/tag", tag);
 
         public async Task AddKolcsonzesAsync(Kolcsonzes kolcsonzes) =>
             await this.httpClient.PostAsJsonAsync("konyvtar/kolcsonzes", kolcsonzes);
 
+        public async Task DeleteKonyvAsync(int leltariSzam) =>
+           await this.httpClient.DeleteAsync($"konyvtar/konyv/{leltariSzam}");
+
+        public async Task DeleteTagAsync(int olvasoSzam) =>
+            await this.httpClient.DeleteAsync($"konyvtar/tag/{olvasoSzam}");
+
         public async Task DeleteKolcsonzesAsync(int id) =>
-           await this.httpClient.DeleteAsync($"konyvtar/kolcsonzes/{id}");
+            await this.httpClient.DeleteAsync($"konyvtar/kolcsonzes/{id}");
     }
 }
